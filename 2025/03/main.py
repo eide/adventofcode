@@ -2,26 +2,20 @@ data = []
 with open("input.txt", encoding="utf-8") as f:
     data = f.read().strip().split("\n")
 
-total1 = 0
-for line in data:
-    high = sorted(line[:-1], reverse=True)[0]
-    rest = line[line.index(high) + 1:]
-    low = sorted(rest, reverse=True)[0]
-    total1 += int(f"{high}{low}")
+def jolt(length):
+    joltage = 0
 
-print(f"Part1: {total1}")
+    for line in data:
+        batteries = ""
+        pos = 0
+        while len(batteries) < length:
+            search = len(line) - (length - 1 - len(batteries))
+            high = max(line[pos:search])
+            pos = line.index(high, pos) + 1
+            batteries += high
+        joltage += int(batteries)
 
-total2 = 0
-for line in data:
-    batteries = ""
-    high = sorted(line[:-12], reverse=True)[0]
-    batteries += high
-    rest = line[line.index(high) + 1:]
-    while len(batteries) < 12:
-        high = sorted(rest[:len(rest) - 12 + 1 + len(batteries)], reverse=True)[0]
-        batteries += high
-        rest = rest[rest.index(high) + 1:]
-    batteries += rest[:12-len(batteries)]
-    total2 += int(batteries)
+    return joltage
 
-print(f"Part2: {total2}")
+print(f"Part1: {jolt(2)}")
+print(f"Part2: {jolt(12)}")
